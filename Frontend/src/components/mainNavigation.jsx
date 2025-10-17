@@ -13,6 +13,7 @@ export default function MainNavigation() {
   
   const handleOpenModal = (e, type) => {
     e.preventDefault()
+    
     dispatch(authActions.openModal(type))
     navigate(`/${type}`)
   }

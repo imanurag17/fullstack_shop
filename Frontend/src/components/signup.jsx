@@ -14,6 +14,7 @@ export default function Signup(){
 
     dispatch(sendUserData(info))
     dispatch(authActions.openModal('login'))
+    
     navigate('/login')
   }
   return (
