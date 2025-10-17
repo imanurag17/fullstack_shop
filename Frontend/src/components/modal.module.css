@@ -1,0 +1,28 @@
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* make it fill the screen */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
+  border: none;
+  padding: 0;
+}
+
+.modal_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 50vw;
+  height: 50vh;
+  background-color: aliceblue;
+  border: 1px solid black;
+}

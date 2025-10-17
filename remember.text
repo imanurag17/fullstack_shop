@@ -1,0 +1,6 @@
+1. Difference between react-router and react-router-dom. 
+  react-router
+  - This is the core routing library.
+  react-router-dom
+  - This is the web implementation of react-router.
+  - Built on top of react-router, and adds DOM-specific bindings.
