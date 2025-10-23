@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const User = require('../models/users')
 
 exports.postSignup = ((req, res, next) => {
@@ -5,14 +6,49 @@ exports.postSignup = ((req, res, next) => {
   const email = req.body.email
   const password = req.body.password
 
-  const user = new User({
-    name: name,
-    email: email,
-    password: password
-  })
-  user.save()
+  User.find
+
+  bcrypt.hash(password, 12)
+    .then(hashedPw => {
+      const user = new User({
+        name: name,
+        email: email,
+        password: hashedPw
+      })
+      return user.save()
+    })
     .then(result => {
       res.status(201).json({ message: 'User Created', userId: result._id })
     })
     .catch(error => console.log(error))
 })
+
+exports.login = (req, res, next) => {
+  const email = req.body.email
+  const password = req.body.password
+  let loadedUser
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        const error = new Error('A user with this email is not found')
+        error.statusCode = 401;
+        throw error
+      }
+      loadedUser = user
+      return bcrypt.compare(password, user.password)
+    })
+    .then(doMatch => {
+      if (!doMatch) {
+        const error = new Error('Incorrect Password')
+        error.statusCode = 401;
+        throw error
+      }
+      res.status(200).json({ userId: loadedUser._id })
+    })
+    .catch(error => {
+      console.error(error);
+      const status = error.statusCode || 500;
+      const message = error.message || 'Something went wrong.';
+      res.status(status).json({ message });
+    });
+}

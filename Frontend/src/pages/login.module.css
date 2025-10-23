@@ -23,3 +23,7 @@
   cursor: pointer;
   padding: 5px;
 }
+
+.error_message {
+  margin-bottom: 20px;
+}

@@ -1,7 +1,10 @@
 import style from './login.module.css'
 
 import { useState, useRef } from "react"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+
+import { authActions } from '../features/auth/auth'
 
 export default function LoginForm(props) {
   const [error, setError] = useState({
@@ -9,7 +12,17 @@ export default function LoginForm(props) {
     password: false,
   })
 
+  const dispatch = useDispatch()
+  const location = useLocation()
   const modalType = useSelector((state) => state.auth.modalType)
+  const notification = useSelector(state => state.auth.notification)
+
+  const path = location.pathname.replace('/', '')
+  let message;
+
+  if (notification) {
+    message = notification.message
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -46,6 +59,7 @@ export default function LoginForm(props) {
   }
 
   function handleChange(e) {
+    dispatch(authActions.showNotification(null))
     const name = e.target.name
     setError(prevValue => {
       if (name === 'email') {
@@ -64,8 +78,9 @@ export default function LoginForm(props) {
 
   return (
     <>
+      <p className={style.error_message}>{message}</p>
       <form action="/login" method="post" onSubmit={handleSubmit}>
-        {modalType === 'signup' && (
+        {(modalType === 'signup' || path === 'signup') && (
           <div className={style.input_container}>
             <label htmlFor="" className={style.input_label}>Name</label>
             <input type="text" name="name" onChange={handleChange} className={style.input_field} />
@@ -93,7 +108,7 @@ export default function LoginForm(props) {
           {error.password && <p>Your Password is small</p>}
         </div>
         <div className={style.buttons_container}>
-          <button type="submit">{modalType === 'signup' ? 'Signup' : 'Login'}</button>
+          <button type="submit">{(modalType === 'signup' || path === "signup") ? 'Signup' : 'Login'}</button>
           <button type='button' onClick={props.handleClose}>Close</button>
         </div>
       </form>
