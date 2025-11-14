@@ -1,0 +1,15 @@
+.form_container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+}
+
+.form_container div {
+  width: 50vw;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}

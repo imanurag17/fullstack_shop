@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
 const authRouter = require('./routes/auth')
+const prodRouter = require('./routes/prod')
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/auth',authRouter)
+app.use(prodRouter)
 
 mongoose.connect(
   'mongodb+srv://anurag17:xyzxyz%40123@cluster0.ta7afh4.mongodb.net/shoppingApp?retryWrites=true&w=majority&appName=Cluster0'

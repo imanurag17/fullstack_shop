@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   isLoggedIn: false,
   modalType: null,
-  users: [],
+  currentUser: null,
   notification: null
 }
 
@@ -19,13 +19,8 @@ const authSlice = createSlice({
     },
     userData(state, action) {
       //check the payload user data is already exist
-      const existingUser = state.users.find(user => user.userId === action.payload.userId)
-      if (existingUser) {
-        state.isLoggedIn = true
-        return
-      }
-      state.users.push(action.payload)
-      state.isLoggedIn = true
+      state.currentUser = action.payload;
+      state.isLoggedIn = true;
     },
     showNotification(state, action) {
       state.notification = action.payload

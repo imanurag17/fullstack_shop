@@ -44,12 +44,11 @@ export const userLogin = (loginInfo) => {
         error.status = response.status
         throw error
       }
+      return data
     }
     try {
       const user = await getUser()
       dispatch(authActions.userData(user))
-      console.log(user);
-
     } catch (error) {
       console.log('error =>', error.message, 'status =>', error.status);
       dispatch(authActions.showNotification({

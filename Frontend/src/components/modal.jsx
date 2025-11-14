@@ -8,12 +8,11 @@ import { authActions } from '../features/auth/auth'
 
 export default function Modal(props) {
 
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const path = location.pathname.replace('/', '')
+  //const path = location.pathname.replace('/', '')
 
   const modalType = useSelector(state => state.auth.modalType)
 

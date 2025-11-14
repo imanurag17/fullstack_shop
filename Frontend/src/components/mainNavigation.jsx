@@ -8,16 +8,17 @@ import { authActions } from '../features/auth/auth'
 
 
 export default function MainNavigation() {
-  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  const loggedInUserId = useSelector(state => state.auth.currentUser?.userId)
   const navigate = useNavigate()
-  
+
   const handleOpenModal = (e, type) => {
     e.preventDefault()
-    
+
     //dispatch(authActions.openModal(type))
     navigate(`/${type}`)
   }
-    
+
   return (
     <header className={style.main_header}>
       <nav className={style.main_nav}>
@@ -28,10 +29,29 @@ export default function MainNavigation() {
           <li className={style.list_item}>
             <Link to='/products'>Products</Link>
           </li>
+          {isLoggedIn &&
+            <ul className={style.list_items}>
+              <li className={style.list_item}>
+                <Link to='/add-product'>Add Product</Link>
+              </li>
+              <li className={style.list_item}>
+                <Link to={`/admin-products/${loggedInUserId}`}>Admin Products</Link>
+              </li>
+              <li className={style.list_item}>
+                <Link to='/cart'>Cart</Link>
+              </li>
+            </ul>
+          }
         </ul>
         <form action="">
-          <button onClick={(e) => handleOpenModal(e, 'login')}>Login</button>
-          <button onClick={(e) => handleOpenModal(e, 'signup')}>Signup</button>
+          {isLoggedIn ?
+            <button >Logout</button>
+            : 
+            <>
+              <button onClick={(e) => handleOpenModal(e, 'login')}>Login</button>
+              <button onClick={(e) => handleOpenModal(e, 'signup')}>Signup</button>
+            </>
+          }
         </form>
       </nav>
     </header>

@@ -10,6 +10,7 @@ export default function Signin(){
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  const users = useSelector(state => state.auth.users)
 
   useEffect(() => {
     dispatch(authActions.openModal('login'));
@@ -26,7 +27,8 @@ export default function Signin(){
   const loginInfo = (loginInfo) => {
     dispatch(userLogin(loginInfo)) // async action
   }
-  
+  console.log('users =>',users)
+
   // const loginInfo = (loginInfo) =>{
   //   dispatch(userLogin(loginInfo))
   //   if (isLoggedIn) {

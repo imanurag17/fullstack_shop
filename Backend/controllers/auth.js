@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/users')
 
 exports.postSignup = ((req, res, next) => {
@@ -6,7 +7,7 @@ exports.postSignup = ((req, res, next) => {
   const email = req.body.email
   const password = req.body.password
 
-  User.find
+  //User.find
 
   bcrypt.hash(password, 12)
     .then(hashedPw => {
@@ -43,7 +44,14 @@ exports.login = (req, res, next) => {
         error.statusCode = 401;
         throw error
       }
-      res.status(200).json({ userId: loadedUser._id })
+      const token = jwt.sign({
+        email: loadedUser.email,
+        userId: loadedUser._id.toString()
+      },
+      'secret_key',
+      {expiresIn: '1h'}
+    )
+      res.status(200).json({ token: token, userId: loadedUser._id })
     })
     .catch(error => {
       console.error(error);
