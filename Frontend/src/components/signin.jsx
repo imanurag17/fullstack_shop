@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import Modal from "./modal"
 import { userLogin } from "../features/auth/auth.actions"
 import { authActions } from "../features/auth/auth"
+import { getCart } from "../features/cart/cart.actions"
 
 export default function Signin(){
   const dispatch = useDispatch()
@@ -19,6 +20,7 @@ export default function Signin(){
   // Navigate when user logs in
   useEffect(() => {
     if (isLoggedIn) {
+      dispatch(getCart())
       dispatch(authActions.closeModal())
       navigate("/");
     }
@@ -27,8 +29,7 @@ export default function Signin(){
   const loginInfo = (loginInfo) => {
     dispatch(userLogin(loginInfo)) // async action
   }
-  console.log('users =>',users)
-
+  
   // const loginInfo = (loginInfo) =>{
   //   dispatch(userLogin(loginInfo))
   //   if (isLoggedIn) {

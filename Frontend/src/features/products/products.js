@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit'
 const initialState = {
   products: {
     items: [],
-    allProducts: true, // default
+    allProducts: null, // default
   },
   notification: null
 }

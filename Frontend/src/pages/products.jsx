@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Product from './product';
 import ConfirmationModal from '../components/confirmationModal';
 import { productActions } from '../features/products/products';
+import {cartActions} from '../features/cart/cart'
 import { deleteProduct as deleteProductThunk } from '../features/products/product.actions';
+import { addToCart } from '../features/cart/cart.actions';
 
 export default function ProductPage() {
   const [confirmation, setConfirmation] = useState(null)
@@ -15,9 +17,11 @@ export default function ProductPage() {
   const navigate = useNavigate()
   const products = useSelector(state => state.prod.products.items)
   const allProducts = useSelector(state => state.prod.products.allProducts)
+  const {userId, token} = useSelector(state => state.auth.currentUser)
 
   useEffect(() => {
     dispatch(productActions.setProducts(dataFromLoader))
+    //dispatch(addToCart({prodId: prod._id}))
   }, [dataFromLoader, dispatch])
   console.log(products)
 
@@ -32,9 +36,19 @@ export default function ProductPage() {
     setDeleteProduct(product)
   }
   
-  function handleDelete(prodId){
-    console.log('productToBeDeleted', prodId)
-    dispatch(deleteProductThunk(prodId))
+  async function handleDelete(prodId){
+    try {
+      const resultAction = await dispatch(deleteProductThunk(prodId)).unwrap()
+      setConfirmation(false)
+      navigate(`/admin-products/${userId}`)
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  function handleAddToCart(prod){
+    dispatch(cartActions.addItemLocaly(prod))
+    dispatch(addToCart({prodId: prod._id}))
   }
 
   return (
@@ -59,6 +73,7 @@ export default function ProductPage() {
               onStartEdit={() => startEditProductHandler(prod._id)}
               onStartDelete={() => startDeleteProductHandler(prod._id)}
               allProducts={allProducts}
+              onAddToCart={() => handleAddToCart(prod)}
             />
           </li>
         ))}

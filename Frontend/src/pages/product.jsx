@@ -6,6 +6,7 @@ export default function Product(props) {
     month: 'short',
     year: 'numeric'
   })
+  
   return (
     <article className={style.product}>
       <header className={style.product__header}>
@@ -16,13 +17,31 @@ export default function Product(props) {
       </header>
       {/* <div className="post__image">
       <Image imageUrl={props.image} contain />
-    </div>
-    <div className="post__content">{props.content}</div> */}
+      </div>
+      <div className="post__content">{props.content}</div> */}
       <div className={style.product__actions}>
-        <button mode="flat" >
-          View
-        </button>
-        {!props.allProducts && (
+        {props.allProducts ?
+          (<div>
+            <button mode="flat" >
+              View
+            </button>
+            <button mode="flat" onClick={props.onAddToCart} >
+              Add to Cart
+            </button>
+          </div>) :
+          (<div>
+            <button mode="flat" >
+              View
+            </button>
+            <button mode="flat" onClick={props.onStartEdit} >
+              Edit
+            </button>
+            <button mode="flat" design="danger" onClick={props.onStartDelete} >
+              Delete
+            </button>
+          </div>)
+        }
+        {/* {!props.allProducts && (
           <>
             <button mode="flat" onClick={props.onStartEdit} >
               Edit
@@ -31,7 +50,7 @@ export default function Product(props) {
               Delete
             </button>
           </>
-        )}
+        )} */}
       </div>
     </article>
   )

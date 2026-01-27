@@ -10,6 +10,7 @@ import { authActions } from '../features/auth/auth'
 export default function MainNavigation() {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   const loggedInUserId = useSelector(state => state.auth.currentUser?.userId)
+  const totalQuantity = useSelector(state => state.cart.totalQuantity)
   const navigate = useNavigate()
 
   const handleOpenModal = (e, type) => {
@@ -38,7 +39,7 @@ export default function MainNavigation() {
                 <Link to={`/admin-products/${loggedInUserId}`}>Admin Products</Link>
               </li>
               <li className={style.list_item}>
-                <Link to='/cart'>Cart</Link>
+                <Link to={`/cart/${loggedInUserId}`}>Cart ({totalQuantity})</Link>
               </li>
             </ul>
           }

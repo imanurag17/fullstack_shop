@@ -6,6 +6,7 @@ import RootLayout from './pages/root'
 import HomePage from './pages/home'
 import ProductPage from './pages/products'
 import AddProduct from './pages/addproduct'
+import Cart from './pages/cart'
 import ErrorPage from './pages/errorPage'
 import { productLoader } from './pages/products'
 
@@ -22,7 +23,8 @@ function App() {
         {path: '/login', element: <Signin />},
         {path: '/signup', element: <Signup/>},
         {path: '/add-product', element: <AddProduct/>},
-        {path: '/admin-products/:userId', element: <ProductPage/>, errorElement: <ErrorPage/>, loader: productLoader}
+        {path: '/admin-products/:userId', element: <ProductPage/>, errorElement: <ErrorPage/>, loader: productLoader},
+        {path: '/cart/:userId', element: <Cart/>, errorElement: <ErrorPage/>}
       ]
     },
   ])

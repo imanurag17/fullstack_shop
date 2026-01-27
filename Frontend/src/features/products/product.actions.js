@@ -1,3 +1,4 @@
+import { createAsyncThunk } from "@reduxjs/toolkit"
 import { productActions } from "./products"
 
 export const createProduct = (productInfo, token) => {
@@ -32,7 +33,6 @@ export const createProduct = (productInfo, token) => {
         status: 'success',
         message: 'product created successfully'
       }))
-      console.log(product)
       return { status: 'success' }
     } catch (error) {
       dispatch(productActions.showNotification({
@@ -81,39 +81,60 @@ export const updateProduct = (productInfo, token, id) => {
   }
 }
 
-export const deleteProduct = (id) => {
-  return async(dispatch) => {
-    dispatch(productActions.showNotification({
-      title: 'sending...',
-      status: 'pending',
-      message: 'Deleting Product!'
-    }))
-    try {
+export const deleteProduct = createAsyncThunk(
+  'product/deleteProduct',
+  async (id, thunkAPI) => {
+    try{
       const response = await fetch(`http://localhost:4000/deleteProduct?prodId=${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          //Authorization: 'Bearer ' + token
         },
-        //body: JSON.stringify(productInfo)
       })
       const data = await response.json()
-      if (!response.ok) {
-        const error = new Error(data.message || 'Failed to delete product')
-        error.status = response.status
-        throw error
+      if(!response.ok){
+        return thunkAPI.rejectWithValue(data.message || 'failed to delete product')
       }
-      dispatch(productActions.showNotification({
-        title: 'Success!',
-        status: 'success',
-        message: 'product deleted successfully'
-      }))
-    } catch (error) {
-      dispatch(productActions.showNotification({
-        title: 'sending request failed',
-        status: error.status,
-        message: error.message
-      }));
+      return data
+    }catch(error){
+      return thunkAPI.rejectWithValue('Network Error')
     }
   }
-}
+)
+
+// export const deleteProduct = (id) => {
+//   return async(dispatch) => {
+//     dispatch(productActions.showNotification({
+//       title: 'sending...',
+//       status: 'pending',
+//       message: 'Deleting Product!'
+//     }))
+//     try {
+//       const response = await fetch(`http://localhost:4000/deleteProduct?prodId=${id}`, {
+//         method: 'DELETE',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           //Authorization: 'Bearer ' + token
+//         },
+//         //body: JSON.stringify(productInfo)
+//       })
+//       const data = await response.json()
+//       if (!response.ok) {
+//         const error = new Error(data.message || 'Failed to delete product')
+//         error.status = response.status
+//         throw error
+//       }
+//       dispatch(productActions.showNotification({
+//         title: 'Success!',
+//         status: 'success',
+//         message: 'product deleted successfully'
+//       }))
+//     } catch (error) {
+//       dispatch(productActions.showNotification({
+//         title: 'sending request failed',
+//         status: error.status,
+//         message: error.message
+//       }));
+//     }
+//   }
+// }
