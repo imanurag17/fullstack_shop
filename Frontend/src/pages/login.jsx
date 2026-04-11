@@ -23,7 +23,6 @@ export default function LoginForm(props) {
   if (notification) {
     message = notification.message
   }
-
   function handleSubmit(e) {
     e.preventDefault()
     const formData = new FormData(e.target)
@@ -75,7 +74,7 @@ export default function LoginForm(props) {
       } else return error;
     })
   }
-
+ 
   return (
     <>
       <p className={style.error_message}>{message}</p>

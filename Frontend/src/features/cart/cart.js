@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getCart } from './cart.actions'
 
 
 const initialState = {
@@ -45,25 +46,51 @@ const cartSlice = createSlice({
         state.totalQuantity + value
       );
     },
-    replaceCart(state, action) {
-      const serverCart = action.payload
-      const itemsById = {}
-      const ids = []
-      (serverCart.items || []).forEach(it => {
-        const id = String(it._id ?? it.id);
-        itemsById[id] = { ...it, quantity: Number(it.quantity || 0) };
-        ids.push(id);
-      });
-      state.itemsById = itemsById;
-      state.ids = ids;
-      state.totalQuantity = serverCart.totalQuantity ?? ids.reduce((s, id) => s + (itemsById[id].quantity || 0), 0);
-      state.lastError = null;
-      state.status = 'idle';
-    },
+    // replaceCart(state, action) {
+    //   const serverCart = action.payload
+    //   const itemsById = {}
+    //   const ids = []
+    //   (serverCart.items || []).forEach(it => {
+    //     const id = String(it._id ?? it.id);
+    //     itemsById[id] = { ...it, quantity: Number(it.quantity || 0) };
+    //     ids.push(id);
+    //   });
+    //   state.itemsById = itemsById;
+    //   state.ids = ids;
+    //   state.totalQuantity = serverCart.totalQuantity ?? ids.reduce((s, id) => s + (itemsById[id].quantity || 0), 0);
+    //   state.lastError = null;
+    //   state.status = 'idle';
+    // },
     setLastError(state, action) {
       state.lastError = action.payload;
       state.status = 'failed';
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCart.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getCart.fulfilled, (state, action) => {
+        const serverCart = action.payload
+        const itemsById = {}
+        const ids = [];
+          (serverCart.items || []).forEach(it => {
+            const id = String(it._id ?? it.id);
+            itemsById[id] = { ...it, quantity: Number(it.quantity || 0) };
+            ids.push(id);
+          });
+        state.itemsById = itemsById;
+        state.ids = ids;
+        state.totalQuantity =
+          serverCart.totalQuantity ??
+          ids.reduce((s, id) => s + itemsById[id].quantity, 0);
+        state.status = 'idle';
+      })
+      .addCase(getCart.rejected, (state, action) => {
+        state.status = 'failed';
+        state.lastError = action.error.message;
+      });
   }
 })
 

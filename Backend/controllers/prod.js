@@ -193,3 +193,23 @@ exports.getCart = (req, res, next) => {
       res.status(status).json({ message });
     });
 };
+
+exports.updateCart = (req, res, next) => {
+  const userId = req.userId;
+  const {prodId, id} = req.body
+  
+  User.findById(userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('Could not find User');
+        error.statusCode = 404;
+        throw error;
+      }
+      return user;
+    })
+    .then(user => {
+      user.cart.map(prod => {
+
+      })
+    })
+}

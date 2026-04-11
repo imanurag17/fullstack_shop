@@ -7,7 +7,7 @@ export default function Cart() {
   const cart = useSelector(state => state.cart.itemsById)
   const ids = useSelector(state => state.cart.ids)
   const isEmpty = ids.length === 0
-  
+  console.log(cart)
   function handleAddItem(prod, value){
     dispatch(cartActions.updateItemLocaly({prod, value}))
   }

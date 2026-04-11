@@ -11,7 +11,7 @@ export default function Signin(){
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
-  const users = useSelector(state => state.auth.users)
+  //const token = useSelector(state => state.auth.currentUser.token)
 
   useEffect(() => {
     dispatch(authActions.openModal('login'));
